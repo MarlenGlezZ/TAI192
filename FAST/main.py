@@ -27,7 +27,7 @@ def leerUsuarios():
     return{"Los usuarios registrados son":usuarios}
 
 #Endpoint Agregar nuevos /post
-@app.post('/usuario/',tags=['Operaciones CRUD POST'])
+@app.post('/usuario/',tags=['Operaciones CRUD'])
 def agregarUsuario(usuario:dict):# parametro con tipo
     for usr in usuarios:
         if usr["id"] == usuario.get("id"):
@@ -36,8 +36,8 @@ def agregarUsuario(usuario:dict):# parametro con tipo
     usuarios.append(usuario)
     return usuario
 
-#Endpoint Agregar nuevos /put
-@app.put('/usuario/{id}',tags=['Operaciones CRUD PUT'])
+#Endpoint Actualizar
+@app.put('/usuario/{id}',tags=['Operaciones CRUD'])
 def actualizarUsuario(id:int, usuarioActualizado:dict):
     for index, usr in enumerate(usuarios):
         if usr["id"] == id:
@@ -45,5 +45,16 @@ def actualizarUsuario(id:int, usuarioActualizado:dict):
             return usuarios[index]
     
     raise HTTPException(status_code=400, detail="El id no existe")
+
+
+#Endpoint Delete
+@app.delete('/usuario/{id}', tags=['Operaciones CRUD'])
+def eliminarUsuario(id: int):
+    for index, usr in enumerate(usuarios):
+        if usr["id"] == id:
+            usuarios.pop(index)
+            return {"mensaje": "Usuario eliminado con éxito"}
+    
+    raise HTTPException(status_code=400, detail="El id no existe, ya fue eliminado")
 
     
