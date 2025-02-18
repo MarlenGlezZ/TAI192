@@ -51,3 +51,11 @@ tareas = [
 @app.get('/tareas', tags=['Tareas'])
 def obtener_tareas():
     return {"tareas": tareas}
+
+#Endpoint buscar tarea especifica
+@app.get('/tareas/{tarea_id}', tags=['Tareas'])
+def obtener_tarea(tarea_id: int):
+    tarea = next((tarea for tarea in tareas if tarea["id"] == tarea_id), None)
+    if tarea:
+        return tarea
+    raise HTTPException(status_code=404, detail="Tarea no encontrada")
