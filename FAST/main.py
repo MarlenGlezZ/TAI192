@@ -36,8 +36,8 @@ def leerUsuarios():
     return{"Los usuarios registrados son":usuarios}
 
 #Endpoint Agregar nuevos /post
-@app.post('/usuario/',tags=['Operaciones CRUD'])
-def agregarUsuario(usuario:dict):# parametro con tipo
+@app.post('/usuario/',response_model=modeloUsuario, tags=['Operaciones CRUD'])
+def agregarUsuario(usuario:modeloUsuario):
     for usr in usuarios:
         if usr["id"] == usuario.get("id"):
             raise HTTPException(status_code=400, detail="El id ya existe")
@@ -46,13 +46,12 @@ def agregarUsuario(usuario:dict):# parametro con tipo
     return usuario
 
 #Endpoint Actualizar
-@app.put('/usuario/{id}',tags=['Operaciones CRUD'])
-def actualizarUsuario(id:int, usuarioActualizado:dict):
+@app.put('/usuario/{id}',response_model=modeloUsuario,tags=['Operaciones CRUD'])
+def actualizarUsuario(id:int, usuarioActualizado:modeloUsuario):
     for index, usr in enumerate(usuarios):
         if usr["id"] == id:
-            usuarios[index].update(usuarioActualizado)
+            usuarios[index]=usuarioActualizado.model_dump()
             return usuarios[index]
-    
     raise HTTPException(status_code=400, detail="El id no existe")
 
 
